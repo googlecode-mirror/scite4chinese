@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>SciTE and Scintilla Commands</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+<body bgcolor="white">
+<table class="tmenu" width="100%"><tr><td>
+  <table bgcolor="#000000" width="100%" cellspacing="4" cellpadding="0" border="0" summary="banner">
+    <tr>
+      <td><img src="SciTEIco.png" height="64" width="64" alt="Scintilla icon"></td>
+      <td width="100%"><font size="5">SciTE and Scintilla Commands</font></td>
+    </tr>
+  </table>
+
+  <table bgcolor="#CCCCCC" width="100%" cellspacing="0" cellpadding="6" summary="tmenu">
+    <tr><td>
+      <nobr><A href="SciTEDoc.html">Documentation</A></nobr>&nbsp;&nbsp;
+      <nobr><A href="SciTEFAQ.html">FAQ</A></nobr>&nbsp;&nbsp;
+      <nobr><A href="SciTERegEx.html">Regular Expressions</A></nobr>&nbsp;&nbsp;
+      <nobr><A href="SciTELua.html">LUA</A></nobr>&nbsp;&nbsp;
+      <nobr><A href="SciTEDirector.html">SciTE Director</A></nobr>&nbsp;&nbsp;
+      <nobr>SciTE and Scintilla Commands</nobr>&nbsp;&nbsp;
+      <nobr><A href="SciTE-Ru_Kernel.html">Ru-Board Changes</A></nobr>&nbsp;&nbsp;
+      <nobr><a href="../tools/Helper/SciTE.Helper.html">SciTE Helper</a></nobr>&nbsp;&nbsp;
+      <nobr><A href="http://scintilla.sourceforge.net/ScintillaHistory.html">History</A></nobr>&nbsp;&nbsp;
+    </td></tr>
+  </table>
+</td></tr></table>
+
+<h3>SciTE Commands</h3>
+<table border=1 cellpadding=2 cellspacing=0 width=100%>
+<tr><th colspan=4>File</th></td></tr>
+<tr><td>IDM_NEW</td><td>101</td><td>Ctrl+N</td><td>New</td></tr>
+<tr><td>IDM_OPEN</td><td>102</td><td>Ctrl+O</td><td>Open</td></tr>
+<tr><td>IDM_OPENSELECTED</td><td>103</td><td>Ctrl+Shift+O</td><td>Open Selected Filename</td></tr>
+<tr><td>IDM_REVERT</td><td>104</td><td>Ctrl+R</td><td>Revert</td></tr>
+<tr><td>IDM_CLOSE</td><td>105</td><td>Ctrl+W, Ctrl+F4</td><td>Close</td></tr>
+<tr><td>IDM_SAVE</td><td>106</td><td>Ctrl+S</td><td>Save</td></tr>
+<tr><td>IDM_SAVEAS</td><td>110</td><td>Ctrl+Shift+S</td><td>Save As</td></tr>
+<tr><td>IDM_SAVEACOPY</td><td>116</td><td>Ctrl+Shift+P</td><td>Save a Copy</td></tr>
+<tr><td>IDM_ENCODING_DEFAULT</td><td>150</td><td>&nbsp;</td><td>Code Page Property</td></tr>
+<tr><td>IDM_ENCODING_UCS2BE</td><td>151</td><td>&nbsp;</td><td>UCS-2 Big Endian</td></tr>
+<tr><td>IDM_ENCODING_UCS2LE</td><td>152</td><td>&nbsp;</td><td>UCS-2 Little Endian</td></tr>
+<tr><td>IDM_ENCODING_UTF8</td><td>153</td><td>&nbsp;</td><td>UTF-8 with BOM</td></tr>
+<tr><td>IDM_ENCODING_UCOOKIE</td><td>154</td><td>&nbsp;</td><td>UTF-8</td></tr>
+<tr><td>IDM_SAVEASHTML</td><td>111</td><td>&nbsp;</td><td>Export As HTML</td></tr>
+<tr><td>IDM_SAVEASRTF</td><td>112</td><td>&nbsp;</td><td>Export As RTF</td></tr>
+<tr><td>IDM_SAVEASPDF</td><td>113</td><td>&nbsp;</td><td>Export As PDF</td></tr>
+<tr><td>IDM_SAVEASTEX</td><td>115</td><td>&nbsp;</td><td>Export As LaTeX</td></tr>
+<tr><td>IDM_SAVEASXML</td><td>117</td><td>&nbsp;</td><td>Export As XML</td></tr>
+<tr><td>IDM_PRINTSETUP</td><td>130</td><td>&nbsp;</td><td>Page Setup</td></tr>
+<tr><td>IDM_PRINT</td><td>131</td><td>Ctrl+P</td><td>Print</td></tr>
+<tr><td>IDM_LOADSESSION</td><td>132</td><td>&nbsp;</td><td>Load Session</td></tr>
+<tr><td>IDM_SAVESESSION</td><td>133</td><td>&nbsp;</td><td>Save Session</td></tr>
+<tr><td>IDM_FILER</td><td>114</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>IDM_QUIT</td><td>140</td><td>&nbsp;</td><td>Exit</td></tr>
+
+<tr><th colspan=5>Edit</th></td></tr>
+<tr><td>IDM_UNDO</td><td>201</td><td>Ctrl+Z, Alt+BackSpace</td><td>Undo</td></tr>
+<tr><td>IDM_REDO</td><td>202</td><td>Ctrl+Y, Alt+Shift+BackSpace</td><td>Redo</td></tr>
+<tr><td>IDM_CUT</td><td>203</td><td>Ctrl+X</td><td>Cut</td></tr>
+<tr><td>IDM_COPY</td><td>204</td><td>Ctrl+C</td><td>Copy</td></tr>
+<tr><td>IDM_PASTE</td><td>205</td><td>Ctrl+V</td><td>Paste</td></tr>
+<tr><td>IDM_DUPLICATE</td><td>250</td><td>Ctrl+D</td><td>Duplicate</td></tr>
+<tr><td>IDM_CLEAR</td><td>206</td><td>Del</td><td>Delete</td></tr>
+<tr><td>IDM_SELECTALL</td><td>207</td><td>Ctrl+A</td><td>Select All</td></tr>
+<tr><td>IDM_PASTEANDDOWN</td><td>208</td><td>&nbsp;</td><td>Paste and Down</td></tr>
+<tr><td>IDM_COPYASRTF</td><td>245</td><td>&nbsp;</td><td>Copy as RTF</td></tr>
+<tr><td>IDM_MATCHBRACE</td><td>230</td><td>Ctrl+E</td><td>Match Brace</td></tr>
+<tr><td>IDM_SELECTTOBRACE</td><td>231</td><td>Ctrl+Shift+E</td><td>Select to Brace</td></tr>
+<tr><td>IDM_SHOWCALLTIP</td><td>232</td><td>Ctrl+Shift+Space</td><td>Show Calltip</td></tr>
+<tr><td>IDM_COMPLETE</td><td>233</td><td>Ctrl+Space, Ctrl+I</td><td>Complete Symbol</td></tr>
+<tr><td>IDM_COMPLETEWORD</td><td>234</td><td>Ctrl+Return</td><td>Complete Word</td></tr>
+<tr><td>IDM_ABBREV</td><td>242</td><td>Ctrl+B</td><td>Expand Abbreviation</td></tr>
+<tr><td>IDM_INS_ABBREV</td><td>247</td><td>Ctrl+Shift+R</td><td>Insert Abbreviation</td></tr>
+<tr><td>IDM_BLOCK_COMMENT</td><td>243</td><td>Ctrl+Q</td><td>Block Comment or Uncomment</td></tr>
+<tr><td>IDM_BOX_COMMENT</td><td>246</td><td>Ctrl+Shift+B</td><td>Box Comment</td></tr>
+<tr><td>IDM_STREAM_COMMENT</td><td>244</td><td>Ctrl+Shift+Q</td><td>Stream Comment</td></tr>
+<tr><td>IDM_UPRCASE</td><td>240</td><td>Ctrl+Shift+U</td><td>Make Selection Uppercase</td></tr>
+<tr><td>IDM_LWRCASE</td><td>241</td><td>Ctrl+U</td><td>Make Selection Lowercase</td></tr>
+<tr><td>IDM_JOIN</td><td>248</td><td>&nbsp;</td><td>Paragraph Join</td></tr>
+<tr><td>IDM_SPLIT</td><td>249</td><td>&nbsp;</td><td>Paragraph Split</td></tr>
+
+<tr><th colspan=4>Search</th></td></tr>
+<tr><td>IDM_FIND</td><td>210</td><td>Ctrl+F</td><td>Find</td></tr>
+<tr><td>IDM_FINDNEXT</td><td>211</td><td>F3</td><td>Find Next</td></tr>
+<tr><td>IDM_FINDNEXTBACK</td><td>212</td><td>Shift+F3</td><td>Find Previous</td></tr>
+<tr><td>IDM_FINDNEXTSEL</td><td>213</td><td>Ctrl+F3</td><td>Find selection</td></tr>
+<tr><td>IDM_FINDNEXTBACKSEL</td><td>214</td><td>Ctrl+Shift+F3</td><td>Find selection backwards</td></tr>
+<tr><td>IDM_FINDINFILES</td><td>215</td><td>Ctrl+Shift+F</td><td>Find in Files</td></tr>
+<tr><td>IDM_REPLACE</td><td>216</td><td>Ctrl+H</td><td>Replace</td></tr>
+<tr><td>IDM_INCSEARCH </td><td>252</td><td>Ctrl+Alt+I</td><td>Incremental Search</td></tr>
+<tr><td>IDM_GOTO</td><td>220</td><td>Ctrl+G</td><td>Go to</td></tr>
+<tr><td>IDM_BOOKMARK_NEXT</td><td>221</td><td>F2</td><td>Next Bookmark</td></tr>
+<tr><td>IDM_BOOKMARK_PREV</td><td>223</td><td>Shift+F2</td><td>Previous Bookmark</td></tr>
+<tr><td>IDM_BOOKMARK_TOGGLE</td><td>222</td><td>Ctrl+F2</td><td>Toggle Bookmark</td></tr>
+<tr><td>IDM_BOOKMARK_CLEARALL</td><td>224</td><td>&nbsp;</td><td>Clear All Bookmarks</td></tr>
+<tr><td>IDM_BOOKMARK_NEXT_SELECT</td><td>225</td><td>Alt+F2</td><td>Select to next bookmark</td></tr>
+<tr><td>IDM_BOOKMARK_PREV_SELECT</td><td>226</td><td>Alt+Shift+F2</td><td>Select to previous bookmark</td></tr>
+
+<tr><th colspan=4>View</th></td></tr>
+<tr><td>IDM_EXPAND</td><td>235</td><td>Ctrl+KeypadMultiply</td><td>Toggle current fold</td></tr>
+<tr><td>IDM_TOGGLE_FOLDALL</td><td>236</td><td>&nbsp;</td><td>Toggle all folds</td></tr>
+<tr><td>IDM_TOGGLE_FOLDRECURSIVE</td><td>237</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>IDM_EXPAND_ENSURECHILDRENVISIBLE</td><td>238</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>IDM_FULLSCREEN</td><td>961</td><td>F11</td><td>Full Screen</td></tr>
+<tr><td>IDM_VIEWTOOLBAR</td><td>408</td><td>&nbsp;</td><td>Tool Bar</td></tr>
+<tr><td>IDM_VIEWTABBAR</td><td>410</td><td>&nbsp;</td><td>Tab Bar</td></tr>
+<tr><td>IDM_VIEWSTATUSBAR</td><td>411</td><td>&nbsp;</td><td>Status Bar</td></tr>
+<tr><td>IDM_VIEWSPACE</td><td>402</td><td>Ctrl+Shift+8</td><td>Whitespace</td></tr>
+<tr><td>IDM_VIEWEOL</td><td>403</td><td>Ctrl+Shift+9</td><td>End of Line</td></tr>
+<tr><td>IDM_VIEWGUIDES</td><td>404</td><td>&nbsp;</td><td>Indentation Guides</td></tr>
+<tr><td>IDM_LINENUMBERMARGIN</td><td>407</td><td>&nbsp;</td><td>Line Numbers</td></tr>
+<tr><td>IDM_SELMARGIN</td><td>405</td><td>&nbsp;</td><td>Margin</td></tr>
+<tr><td>IDM_FOLDMARGIN</td><td>406</td><td>&nbsp;</td><td>Fold Margin</td></tr>
+<tr><td>IDM_TOGGLEOUTPUT</td><td>409</td><td>F8</td><td>Output</td></tr>
+<tr><td>IDM_TOGGLEPARAMETERS</td><td>412</td><td>Shift+F8</td><td>Parameters</td></tr>
+
+<tr><th colspan=5>&nbsp;</th></td></tr>
+<tr><td>IDM_PREVMATCHPPC</td><td>260</td><td>Ctrl+J</td><td>Find matching preprocessor conditional backwards, skipping nested ones</td></tr>
+<tr><td>IDM_SELECTTOPREVMATCHPPC</td><td>261</td><td>Ctrl+Shift+J</td><td>Select to matching preprocessor conditional backwards</td></tr>
+<tr><td>IDM_NEXTMATCHPPC</td><td>262</td><td>Ctrl+K</td><td>Find matching preprocessor conditional, skipping nested ones</td></tr>
+<tr><td>IDM_SELECTTONEXTMATCHPPC</td><td>263</td><td>Ctrl+Shift+K</td><td>Select to matching preprocessor conditional</td></tr>
+
+<tr><th colspan=5>Tools</th></td></tr>
+<tr><td>IDM_COMPILE</td><td>301</td><td>Ctrl+F7</td><td>Compile</td></tr>
+<tr><td>IDM_BUILD</td><td>302</td><td>F7</td><td>Build</td></tr>
+<tr><td>IDM_GO</td><td>303</td><td>F5</td><td>Go</td></tr>
+<tr><td>IDM_STOPEXECUTE</td><td>304</td><td>Ctrl+Break</td><td>Stop Executing</td></tr>
+<tr><td>IDM_FINISHEDEXECUTE</td><td>305</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>IDM_TOOLS+0&hellip;9</td><td>1100+0&hellip;9</td><td>Ctrl+0&hellip;9</td><td>Run 0&hellip;9 command from menu Tools</td></tr>
+<tr><td>IDM_MACROLIST</td><td>314</td><td>Shift+F9</td><td>List Macros</td></tr>
+<tr><td>IDM_MACROPLAY</td><td>313</td><td>F9</td><td>Run Current Macro</td></tr>
+<tr><td>IDM_MACRORECORD</td><td>311</td><td>Ctrl+F9</td><td>Record Macro</td></tr>
+<tr><td>IDM_MACROSTOPRECORD</td><td>312</td><td>Ctrl+Shift+F9</td><td>Stop Recording Macro</td></tr>
+<tr><td>IDM_NEXTMSG</td><td>306</td><td>F4</td><td>Next Message</td></tr>
+<tr><td>IDM_PREVMSG</td><td>307</td><td>Shift+F4</td><td>Previous Message</td></tr>
+<tr><td>IDM_CLEAROUTPUT</td><td>420</td><td>Shift+F5</td><td>Clear Output</td></tr>
+<tr><td>IDM_SWITCHPANE</td><td>421</td><td>Ctrl+F6, Ctrl+Shift+F6</td><td>Switch Pane</td></tr>
+
+<tr><th colspan=5>Options</th></td></tr>
+<tr><td>IDM_ONTOP</td><td>960</td><td>&nbsp;</td><td>Always On Top</td></tr>
+<tr><td>IDM_OPENFILESHERE</td><td>413</td><td>&nbsp;</td><td>Open Files Here</td></tr>
+<tr><td>IDM_SPLITVERTICAL</td><td>401</td><td>&nbsp;</td><td>Vertical Split</td></tr>
+<tr><td>IDM_WRAP</td><td>414</td><td>&nbsp;</td><td>Wrap</td></tr>
+<tr><td>IDM_WRAPOUTPUT</td><td>415</td><td>&nbsp;</td><td>Wrap Output</td></tr>
+<tr><td>IDM_READONLY</td><td>416</td><td>&nbsp;</td><td>Read-Only</td></tr>
+<tr><td>IDM_EOL_CRLF</td><td>430</td><td>&nbsp;</td><td>CR + LF</td></tr>
+<tr><td>IDM_EOL_CR</td><td>431</td><td>&nbsp;</td><td>CR</td></tr>
+<tr><td>IDM_EOL_LF</td><td>432</td><td>&nbsp;</td><td>LF</td></tr>
+<tr><td>IDM_EOL_CONVERT</td><td>433</td><td>&nbsp;</td><td>Convert Line End Characters</td></tr>
+<tr><td>IDM_TABSIZE</td><td>440</td><td>Ctrl+Shift+I</td><td>Change Indentation Settings</td></tr>
+<tr><td>IDM_MONOFONT</td><td>450</td><td>Ctrl+F11</td><td>Use Monospaced Font</td></tr>
+<tr><td>IDM_OPENLOCALPROPERTIES</td><td>460</td><td>&nbsp;</td><td>Open Local Options File</td></tr>
+<tr><td>IDM_OPENDIRECTORYPROPERTIES</td><td>460</td><td>&nbsp;</td><td>Open Directory Options File</td></tr>
+<tr><td>IDM_OPENUSERPROPERTIES</td><td>461</td><td>&nbsp;</td><td>Open User Options File</td></tr>
+<tr><td>IDM_OPENGLOBALPROPERTIES</td><td>462</td><td>&nbsp;</td><td>Open Global Options File</td></tr>
+<tr><td>IDM_OPENABBREVPROPERTIES</td><td>463</td><td>&nbsp;</td><td>Open Abbreviations File</td></tr>
+<tr><td>IDM_OPENLUAEXTERNALFILE</td><td>464</td><td>&nbsp;</td><td>Open Lua Startup Script</td></tr>
+
+<tr><th colspan=4>Buffers</th></td></tr>
+<tr><td>IDM_BUFFER+0&hellip;9</td><td>1200+0&hellip;9</td><td>Alt+1&hellip;0</td><td>Switch to 1&hellip;10 buffer</td></tr>
+<tr><td>IDM_PREVFILE</td><td>501</td><td>Shift+F6</td><td>Previous file</td></tr>
+<tr><td>IDM_NEXTFILE</td><td>502</td><td>F6</td><td>Next file</td></tr>
+<tr><td>IDM_CLOSEALL</td><td>503</td><td>&nbsp;</td><td>Close all</td></tr>
+<tr><td>IDM_SAVEALL</td><td>504</td><td>&nbsp;</td><td>Save All</td></tr>
+<tr><td>IDM_PREVFILESTACK</td><td>506</td><td>Ctrl+Shift+Tab</td><td>Previous file</td></tr>
+<tr><td>IDM_NEXTFILESTACK</td><td>507</td><td>Ctrl+Tab</td><td>Next file</td></tr>
+
+<tr><th colspan=5>Help</th></td></tr>
+<tr><td>IDM_HELP</td><td>901</td><td>F1</td><td>Help</td></tr>
+<tr><td>IDM_HELP_SCITE</td><td>903</td><td>&nbsp;</td><td>SciTE Help</td></tr>
+<tr><td>IDM_ABOUT</td><td>902</td><td>&nbsp;</td><td>About SciTE</td></tr>
+
+<tr><th colspan=5>&nbsp;</th></td></tr>
+<tr><td>IDM_ACTIVATE</td><td>320</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>IDM_ENTERSELECTION</td><td>256</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+<h3>Scintilla Commands</h3>
+<table border=1 cellpadding=2 cellspacing=0 width=100%>
+
+<tr><td>SCI_LINEDOWN</td><td>2300</td><td>Down</td><td>Line Down</td></tr>
+<tr><td>SCI_LINEDOWNEXTEND</td><td>2301</td><td>Shift+Down</td><td>Select Line Down</td></tr>
+<tr><td>SCI_LINESCROLLDOWN</td><td>2342</td><td>Ctrl+Down</td><td>Scroll down</td></tr>
+<tr><td>SCI_LINEDOWNRECTEXTEND</td><td>2426</td><td>Alt+Shift+Down</td><td>&nbsp;</td></tr>
+<tr><td>SCI_LINEUP</td><td>2302</td><td>Up</td><td>Line Up</td></tr>
+<tr><td>SCI_LINEUPEXTEND</td><td>2303</td><td>Shift+Up</td><td>Select Line Up</td></tr>
+<tr><td>SCI_LINESCROLLUP</td><td>2343</td><td>Ctrl+Up</td><td>Scroll up</td></tr>
+<tr><td>SCI_LINEUPRECTEXTEND</td><td>2427</td><td>Alt+Shift+Up</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PARAUP</td><td>2415</td><td>Ctrl+[</td><td>Previous paragraph</td></tr>
+<tr><td>SCI_PARAUPEXTEND</td><td>2416</td><td>Ctrl+Shift+[</td><td>Select previous paragraph</td></tr>
+<tr><td>SCI_PARADOWN</td><td>2413</td><td>Ctrl+]</td><td>Next paragraph</td></tr>
+<tr><td>SCI_PARADOWNEXTEND</td><td>2414</td><td>Ctrl+Shift+]</td><td>Select next paragraph</td></tr>
+<tr><td>SCI_CHARLEFT</td><td>2304</td><td>Left</td><td>Char Left</td></tr>
+<tr><td>SCI_CHARLEFTEXTEND</td><td>2305</td><td>Shift+Left</td><td>Select Char Left</td></tr>
+<tr><td>SCI_WORDLEFT</td><td>2308</td><td>Ctrl+Left</td><td>Previous word</td></tr>
+<tr><td>SCI_WORDLEFTEXTEND</td><td>2309</td><td>Ctrl+Shift+Left</td><td>Select previous word</td></tr>
+<tr><td>SCI_CHARLEFTRECTEXTEND</td><td>2428</td><td>Alt+Shift+Left</td><td>&nbsp;</td></tr>
+<tr><td>SCI_CHARRIGHT</td><td>2306</td><td>Right</td><td>Char Right</td></tr>
+<tr><td>SCI_CHARRIGHTEXTEND</td><td>2307</td><td>Shift+Right</td><td>Select Char Right</td></tr>
+<tr><td>SCI_WORDRIGHT</td><td>2310</td><td>Ctrl+Right</td><td>Next word</td></tr>
+<tr><td>SCI_WORDRIGHTEXTEND</td><td>2311</td><td>Ctrl+Shift+Right</td><td>Select Next word</td></tr>
+<tr><td>SCI_CHARRIGHTRECTEXTEND</td><td>2429</td><td>Alt+Shift+Right</td><td>&nbsp;</td></tr>
+<tr><td>SCI_WORDPARTLEFT</td><td>2390</td><td>Ctrl+/</td><td>Previous word part</td></tr>
+<tr><td>SCI_WORDPARTLEFTEXTEND</td><td>2391</td><td>Ctrl+Shift+/</td><td>Select previous word part</td></tr>
+<tr><td>SCI_WORDPARTRIGHT</td><td>2392</td><td>Ctrl+\</td><td>Next word part</td></tr>
+<tr><td>SCI_WORDPARTRIGHTEXTEND</td><td>2393</td><td>Ctrl+Shift+\</td><td>Select Next word part</td></tr>
+<tr><td>SCI_VCHOME</td><td>2331</td><td>Home</td><td>Line Home</td></tr>
+<tr><td>SCI_VCHOMEEXTEND</td><td>2332</td><td>Shift+Home</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DOCUMENTSTART</td><td>2316</td><td>Ctrl+Home</td><td> Go to start of document</td></tr>
+<tr><td>SCI_DOCUMENTSTARTEXTEND</td><td>2317</td><td>Ctrl+Shift+Home</td><td>Extend selection to start of document</td></tr>
+<tr><td>SCI_HOMEDISPLAY</td><td>2345</td><td>Alt+Home</td><td>Go to start of display line</td></tr>
+<tr><td>SCI_VCHOMERECTEXTEND</td><td>2431</td><td>Alt+Shift+Home</td><td>Extend selection to start of display line</td></tr>
+<tr><td>SCI_LINEEND</td><td>2314</td><td>End</td><td>Line End</td></tr>
+<tr><td>SCI_LINEENDEXTEND</td><td>2315</td><td>Shift+End</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DOCUMENTEND</td><td>2318</td><td>Ctrl+End</td><td>Go to end of document</td></tr>
+<tr><td>SCI_DOCUMENTENDEXTEND</td><td>2319</td><td>Ctrl+Shift+End</td><td>Extend selection to end of document</td></tr>
+<tr><td>SCI_LINEENDDISPLAY</td><td>2347</td><td>Alt+End</td><td>Go to end of display line</td></tr>
+<tr><td>SCI_LINEENDRECTEXTEND</td><td>2432</td><td>Alt+Shift+End</td><td>Extend selection to end of display line</td></tr>
+<tr><td>SCI_PAGEUP</td><td>2320</td><td>PageUp</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PAGEUPEXTEND</td><td>2321</td><td>Shift+PageUp</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PAGEUPRECTEXTEND</td><td>2433</td><td>Alt+Shift+PageUp</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PAGEDOWN</td><td>2322</td><td>PageDown</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PAGEDOWNEXTEND</td><td>2323</td><td>Shift+PageDown</td><td>&nbsp;</td></tr>
+<tr><td>SCI_PAGEDOWNRECTEXTEND</td><td>2434</td><td>Alt+Shift+PageDown</td><td>&nbsp;</td></tr>
+<tr><td>SCI_CLEAR</td><td>2180</td><td>Delete</td><td>&nbsp;</td></tr>
+<tr><td>SCI_CUT</td><td>2177</td><td>Shift+Delete</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DELWORDRIGHT</td><td>2336</td><td>Ctrl+Delete</td><td>Delete to end of word</td></tr>
+<tr><td>SCI_DELLINERIGHT</td><td>2396</td><td>Ctrl+Shift+Delete</td><td>Delete to end of line</td></tr>
+<tr><td>SCI_EDITTOGGLEOVERTYPE</td><td>2324</td><td>Insert</td><td>&nbsp;</td></tr>
+<tr><td>SCI_CANCEL</td><td>2325</td><td>Escape</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DELETEBACK</td><td>2326</td><td>BackSpace, Shift+BackSpace</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DELWORDLEFT</td><td>2335</td><td>Ctrl+BackSpace</td><td>Delete to start of word</td></tr>
+<tr><td>SCI_UNDO</td><td>2176</td><td>Alt+BackSpace</td><td>&nbsp;</td></tr>
+<tr><td>SCI_DELLINELEFT</td><td>2395</td><td>Ctrl+Shift+BackSpace</td><td>Delete to start of line</td></tr>
+<tr><td>SCI_UNDO</td><td>2176</td><td>Ctrl+Z</td><td>Undo</td></tr>
+<tr><td>SCI_REDO</td><td>2011</td><td>Ctrl+Y</td><td>Redo</td></tr>
+<tr><td>SCI_CUT</td><td>2177</td><td>Ctrl+X</td><td>Cut</td></tr>
+<tr><td>SCI_COPY</td><td>2178</td><td>Ctrl+C, Ctrl+Insert</td><td>Copy</td></tr>
+<tr><td>SCI_PASTE</td><td>2179</td><td>Ctrl+V, Shift+Insert</td><td>Paste</td></tr>
+<tr><td>SCI_SELECTALL</td><td>2013</td><td>Ctrl+A</td><td>Select All</td></tr>
+<tr><td>SCI_TAB</td><td>2327</td><td>Tab</td><td>Indent block</td></tr>
+<tr><td>SCI_BACKTAB</td><td>2328</td><td>Shift+Tab</td><td>Dedent block</td></tr>
+<tr><td>SCI_NEWLINE</td><td>2329</td><td>Return,&nbsp;Shift+Return</td><td>&nbsp;</td></tr>
+<tr><td>SCI_ZOOMIN</td><td>2333</td><td>Ctrl+KeypadPlus</td><td>Magnify text size</td></tr>
+<tr><td>SCI_ZOOMOUT</td><td>2334</td><td>Ctrl+KeypadMinus</td><td>Reduce text size</td></tr>
+<tr><td>SCI_SETZOOM</td><td>2373</td><td>Ctrl+KeypadDivide</td><td>Restore text size to normal</td></tr>
+<tr><td>SCI_LINECUT</td><td>2337</td><td>Ctrl+L</td><td>Line cut</td></tr>
+<tr><td>SCI_LINEDELETE</td><td>2338</td><td>Ctrl+Shift+L</td><td>Line delete</td></tr>
+<tr><td>SCI_LINECOPY</td><td>2455</td><td>Ctrl+Shift+T</td><td>Line copy</td></tr>
+<tr><td>SCI_LINETRANSPOSE</td><td>2339</td><td>Ctrl+T</td><td>Line transpose with previous</td></tr>
+<tr><td>SCI_SELECTIONDUPLICATE</td><td>2469</td><td>Ctrl+D</td><td>Selection duplicate</td></tr>
+<tr><td>SCI_LOWERCASE</td><td>2340</td><td>Ctrl+U</td><td>Make Selection Lowercase</td></tr>
+<tr><td>SCI_UPPERCASE</td><td>2341</td><td>Ctrl+Shift+U</td><td>Make Selection Uppercase</td></tr>
+</table>
+<br>
+&nbsp;&nbsp;Make by mozers&trade;
+&nbsp;&middot;&nbsp;05.04.2007
+</body>
+</html>
