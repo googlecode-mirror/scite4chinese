@@ -1,6 +1,6 @@
 --[[--------------------------------------------------
 SideBar.lua
-Authors: Frank Wunderlich, mozersЩ, VladVRO, frs, BioInfo, Tymur Gubayev
+Authors: Frank Wunderlich, mozers? VladVRO, frs, BioInfo, Tymur Gubayev
 version 1.10.3
 ------------------------------------------------------
   Note: Needed gui.dll <http://scite-ru.googlecode.com/svn/trunk/lualib/gui/>
@@ -26,8 +26,8 @@ require 'shell'
 -- you can choose to make it a stand-alone window; just uncomment this line:
 -- local win = true
 
--- local _DEBUG = true --включает вывод отладочной информации
--- отображение флагов/параметров по умолчанию:
+-- local _DEBUG = true --включает выво?отладочной информации
+-- отображени?флагов/параметров по умолчани?
 local _show_flags = tonumber(props['sidebar.functions.flags']) == 1
 local _show_params = tonumber(props['sidebar.functions.params']) == 1
 
@@ -101,8 +101,6 @@ tab0:add(memo_path, "top", 22)
 local list_dir_height = win_height/3
 if list_dir_height <= 0 then list_dir_height = 200 end
 local list_favorites = gui.list(true)
-list_favorites:add_column("Favorites", 600)
-tab0:add(list_favorites, "bottom", list_dir_height)
 
 local list_dir = gui.list()
 tab0:client(list_dir)
@@ -118,10 +116,6 @@ tab0:context_menu {
 	'FileMan: Delete\tDel|FileMan_FileDelete',
 	'FileMan: Execute|FileMan_FileExec',
 	'FileMan: Exec with Params|FileMan_FileExecWithParams',
-	'FileMan: Add to Favorites\tIns|Favorites_AddFile',
-	'', -- separator
-	'Favorites: Add active buffer|Favorites_AddCurrentBuffer',
-	'Favorites: Delete item\tDel|Favorites_DeleteItem',
 }
 -------------------------
 local tab1 = gui.panel(panel_width + 18)
@@ -373,107 +367,6 @@ list_dir:on_key(function(key)
 end)
 
 ----------------------------------------------------------
--- tab0:list_favorites   Favorites
-----------------------------------------------------------
-local favorites_filename = props['SciteUserHome']..'\\favorites.lst'
-local list_fav_table = {}
-
-local function Favorites_ListFILL()
-	list_favorites:clear()
-	table.sort(list_fav_table,
-		function(a, b)
-			local function IsSession(filepath)
-				return filepath:gsub('^.*%.',''):upper() == 'SESSION'
-			end
-			local isAses = IsSession(a)
-			local isBses = IsSession(b)
-			if (isAses and isBses) or not (isAses or isBses) then
-				return a < b
-			else
-				return isAses
-			end
-		end
-	)
-	for _, s in ipairs(list_fav_table) do
-		list_favorites:add_item(s:gsub('.+\\',''), s)
-	end
-end
-
-local function Favorites_OpenList()
-	local favorites_file = io.open(favorites_filename)
-	if favorites_file then
-		for line in favorites_file:lines() do
-			if line ~= '' then
-				line = ReplaceWithoutCase(line, '$(SciteDefaultHome)', props['SciteDefaultHome'])
-				list_fav_table[#list_fav_table+1] = line
-			end
-		end
-		favorites_file:close()
-	end
-	Favorites_ListFILL()
-end
-Favorites_OpenList()
-
-local function Favorites_SaveList()
-	io.output(favorites_filename)
-	local list_string = table.concat(list_fav_table,'\n')
-	list_string = ReplaceWithoutCase(list_string, props['SciteDefaultHome'], '$(SciteDefaultHome)')
-	io.write(list_string)
-	io.close()
-end
-
-function Favorites_AddFile()
-	local filename, attr = FileMan_GetSelectedItem()
-	if filename == '' then return end
-	if attr == 'd' then return end
-	list_fav_table[#list_fav_table+1] = current_path..filename
-	Favorites_ListFILL()
-end
-
-function Favorites_AddCurrentBuffer()
-	list_fav_table[#list_fav_table+1] = props['FilePath']
-	Favorites_ListFILL()
-end
-
-function Favorites_DeleteItem()
-	local idx = list_favorites:get_selected_item()
-	if idx == -1 then return end
-	list_favorites:delete_item(idx)
-	table.remove (list_fav_table, idx+1)
-end
-
-local function Favorites_OpenFile()
-	local idx = list_favorites:get_selected_item()
-	if idx == -1 then return end
-	local filename = list_favorites:get_item_data(idx)
-	OpenFile(filename)
-end
-
-local function Favorites_ShowFilePath()
-	local sel_item = list_favorites:get_selected_item()
-	if sel_item == -1 then return end
-	local expansion = list_favorites:get_item_data(sel_item)
-	editor:CallTipCancel()
-	editor:CallTipShow(-2, expansion)
-end
-
-list_favorites:on_select(function()
-	Favorites_ShowFilePath()
-end)
-
-list_favorites:on_double_click(function()
-	Favorites_OpenFile()
-end)
-
-list_favorites:on_key(function(key)
-	if key == 13 then -- Enter
-		Favorites_OpenFile()
-	elseif key == 46 then -- Delete
-		Favorites_DeleteItem()
-	end
-end)
-
-----------------------------------------------------------
 -- tab1:list_func   Functions/Procedures
 ----------------------------------------------------------
 local table_functions = {}
@@ -487,7 +380,7 @@ local Lang2lpeg = {}
 do
 	local P, V, Cg, Ct, Cc, S, R, C, Carg, Cf, Cb, Cp, Cmt = lpeg.P, lpeg.V, lpeg.Cg, lpeg.Ct, lpeg.Cc, lpeg.S, lpeg.R, lpeg.C, lpeg.Carg, lpeg.Cf, lpeg.Cb, lpeg.Cp, lpeg.Cmt
 
-	--@todo: переписать с использованием lpeg.Cf
+	--@todo: переписать ?использованием lpeg.Cf
 	local function AnyCase(str)
 		local res = P'' --empty pattern to start with
 		local ch, CH
@@ -770,10 +663,10 @@ do
 	do --v----- * ------v--
 		-- redefine common patterns
 		local NL = P"\r\n"+P"\n"+P"\f"
-		local SC = S" \t\160" -- без пон€ти€ что за символ с кодом 160, но он встречаетс€ в SciTEGlobal.properties непосредственно после [Warnings] 10 раз.
+		local SC = S" \t\160" -- бе?по?ти€ чт?за символ ?кодо?160, но он встречаетс€ ?SciTEGlobal.properties непосредственн?посл?[Warnings] 10 ра?
 		local COMMENT = P'#'*(ANY - NL)^0*NL
 		-- define local patterns
-		local somedef = S'fFsS'*S'uU'*S'bBnN'*AZ^0 --пытаемс€ поймать что-нибудь, похожее на определение функции...
+		local somedef = S'fFsS'*S'uU'*S'bBnN'*AZ^0 --пытаем? поймат?чт?нибудь, похоже?на определени?функци?..
 		local section = P'['*(ANY-P']')^1*P']'
 		-- create flags
 		local somedef = Cg(somedef, '')
@@ -787,7 +680,7 @@ do
 
 		-- resulting pattern, which does the work
 		local patt = (def2 + def1 + COMMENT + IDENTIFIER + 1)^0 * EOF
-		-- local patt = (def2 + def1 + IDENTIFIER + 1)^0 * EOF -- чуть медленнее
+		-- local patt = (def2 + def1 + IDENTIFIER + 1)^0 * EOF -- чуть медленне?
 
 		Lang2lpeg['*'] = lpeg.Ct(patt)
 	end --^----- * ------^--
