@@ -1,9 +1,12 @@
 --[[--------------------------------------------------
 SideBar.lua
-Authors: Frank Wunderlich, mozers? VladVRO, frs, BioInfo, Tymur Gubayev
-version 1.10.3
+Authors: Frank Wunderlich, mozersЩ, VladVRO, frs, BioInfo, Tymur Gubayev
+version 1.15
 ------------------------------------------------------
-  Note: Needed gui.dll <http://scite-ru.googlecode.com/svn/trunk/lualib/gui/>
+  Note: Require gui.dll <http://scite-ru.googlecode.com/svn/trunk/lualib/gui/>
+               lpeg.dll <http://scite-ru.googlecode.com/svn/trunk/lualib/lpeg/>
+              shell.dll <http://scite-ru.googlecode.com/svn/trunk/lualib/shell/>
+             COMMON.lua (function GetCurrentWord)
   Connection:
    In file SciTEStartup.lua add a line:
       dofile (props["SciteDefaultHome"].."\\tools\\SideBar.lua")
@@ -19,15 +22,15 @@ version 1.10.3
     sidebar.functions.flags=1
     sidebar.functions.params=1
 --]]--------------------------------------------------
-require 'lpeg'
 require 'gui'
+require 'lpeg'
 require 'shell'
 
 -- you can choose to make it a stand-alone window; just uncomment this line:
 -- local win = true
 
--- local _DEBUG = true --включает выво?отладочной информации
--- отображени?флагов/параметров по умолчани?
+-- local _DEBUG = true --включает вывод отладочной информации
+-- отображение флагов/параметров по умолчанию:
 local _show_flags = tonumber(props['sidebar.functions.flags']) == 1
 local _show_params = tonumber(props['sidebar.functions.params']) == 1
 
@@ -35,6 +38,14 @@ local tab_index = 0
 local panel_width = 200
 local win_height = props['position.height']
 if win_height == '' then win_height = 600 end
+
+local style = props['style.*.32']
+local colorback = style:match('back:(#%x%x%x%x%x%x)')
+local colorfore
+if colorback then
+	colorfore = style:match('fore:(#%x%x%x%x%x%x)')
+	if colorfore == nil then colorfore = '' end
+end
 
 ----------------------------------------------------------
 -- Common functions
@@ -97,13 +108,14 @@ local tab0 = gui.panel(panel_width + 18)
 
 local memo_path = gui.memo()
 tab0:add(memo_path, "top", 22)
+if colorback then memo_path:set_memo_colour('', colorback) end
 
 local list_dir_height = win_height/3
 if list_dir_height <= 0 then list_dir_height = 200 end
-local list_favorites = gui.list(true)
 
 local list_dir = gui.list()
 tab0:client(list_dir)
+if colorback then list_dir:set_list_colour(colorfore,colorback) end
 
 tab0:context_menu {
 	'FileMan: Change Dir|FileMan_ChangeDir',
@@ -120,9 +132,13 @@ tab0:context_menu {
 -------------------------
 local tab1 = gui.panel(panel_width + 18)
 
+local list_func_height = win_height/3
+if list_func_height <= 0 then list_func_height = 200 end
+
 local list_func = gui.list(true)
-list_func:add_column("Functions/Procedures", 600)
+list_func:add_column("Procedures", 600)
 tab1:client(list_func)
+if colorback then list_func:set_list_colour(colorfore,colorback) end
 
 tab1:context_menu {
 	'Functions: Sort by Order|Functions_SortByOrder',
@@ -130,6 +146,14 @@ tab1:context_menu {
 	'Functions: Show/Hide Flags|Functions_ToggleFlags',
 	'Functions: Show/Hide Parameters|Functions_ToggleParams',
 }
+-------------------------
+local tab2 = gui.panel(panel_width + 18)
+
+local list_abbrev = gui.list(true)
+list_abbrev:add_column("Abbrev", 60)
+list_abbrev:add_column("Expansion", 600)
+tab2:client(list_abbrev)
+if colorback then list_abbrev:set_list_colour(colorfore,colorback) end
 
 -------------------------
 local win_parent
@@ -142,6 +166,8 @@ end
 local tabs = gui.tabbar(win_parent)
 tabs:add_tab("FileManager", tab0)
 tabs:add_tab("Functions", tab1)
+tabs:add_tab("Abbrev", tab2)
+win_parent:client(tab2)
 win_parent:client(tab1)
 win_parent:client(tab0)
 
@@ -367,7 +393,7 @@ list_dir:on_key(function(key)
 end)
 
 ----------------------------------------------------------
--- tab1:list_func   Functions/Procedures
+-- tab1:list_func   Procedures
 ----------------------------------------------------------
 local table_functions = {}
 -- 1 - function names
@@ -380,7 +406,7 @@ local Lang2lpeg = {}
 do
 	local P, V, Cg, Ct, Cc, S, R, C, Carg, Cf, Cb, Cp, Cmt = lpeg.P, lpeg.V, lpeg.Cg, lpeg.Ct, lpeg.Cc, lpeg.S, lpeg.R, lpeg.C, lpeg.Carg, lpeg.Cf, lpeg.Cb, lpeg.Cp, lpeg.Cmt
 
-	--@todo: переписать ?использованием lpeg.Cf
+	--@todo: переписать с использованием lpeg.Cf
 	local function AnyCase(str)
 		local res = P'' --empty pattern to start with
 		local ch, CH
@@ -530,8 +556,8 @@ do
 
 	do --v----- C++ ------v--
 		-- define local patterns
-		local keywords = P'if'+P'else'+P'switch'+P'case'+P'while'
-		local nokeyword = -(keywords*SC^1)
+		local keywords = P'if'+P'else'+P'switch'+P'case'+P'while'+P'for'
+		local nokeyword = -(keywords)
 		local type = P"static "^-1*P"const "^-1*P"enum "^-1*P'*'^-1*IDENTIFIER*P'*'^-1
 		local funcbody = P"{"*(ESCANY-P"}")^0*P"}"
 		-- redefine common patterns
@@ -540,12 +566,12 @@ do
 		-- create flags:
 		type = Cg(type,'')
 		-- create additional captures
-		local I = C(IDENTIFIER)*cl
+		local I = nokeyword*C(IDENTIFIER)*cl
 		-- definitions to capture:
 		local funcdef = nokeyword*Ct((type*SC^1)^-1*I*SC^0*par*SC^0*(#funcbody))
-
+		local classconstr = nokeyword*Ct((type*SC^1)^-1*I*SC^0*par*SC^0*P':'*SC^0*IDENTIFIER*SC^0*(P"("*(1-P")")^0*P")")*SC^0*(#funcbody)) -- this matches smthing like PrefDialog::PrefDialog(QWidget *parent, blabla) : QDialog(parent)
 		-- resulting pattern, which does the work
-		local patt = (funcdef + IGNORED^1 + IDENTIFIER + ANY)^0 * EOF
+		local patt = (classconstr + funcdef + IGNORED^1 + IDENTIFIER + ANY)^0 * EOF
 
 		Lang2lpeg['C++'] = lpeg.Ct(patt)
 	end --^----- C++ ------^--
@@ -663,10 +689,10 @@ do
 	do --v----- * ------v--
 		-- redefine common patterns
 		local NL = P"\r\n"+P"\n"+P"\f"
-		local SC = S" \t\160" -- бе?по?ти€ чт?за символ ?кодо?160, но он встречаетс€ ?SciTEGlobal.properties непосредственн?посл?[Warnings] 10 ра?
+		local SC = S" \t\160" -- без пон€ти€ что за символ с кодом 160, но он встречаетс€ в SciTEGlobal.properties непосредственно после [Warnings] 10 раз.
 		local COMMENT = P'#'*(ANY - NL)^0*NL
 		-- define local patterns
-		local somedef = S'fFsS'*S'uU'*S'bBnN'*AZ^0 --пытаем? поймат?чт?нибудь, похоже?на определени?функци?..
+		local somedef = S'fFsS'*S'uU'*S'bBnN'*AZ^0 --пытаемс€ поймать что-нибудь, похожее на определение функции...
 		local section = P'['*(ANY-P']')^1*P']'
 		-- create flags
 		local somedef = Cg(somedef, '')
@@ -680,7 +706,7 @@ do
 
 		-- resulting pattern, which does the work
 		local patt = (def2 + def1 + COMMENT + IDENTIFIER + 1)^0 * EOF
-		-- local patt = (def2 + def1 + IDENTIFIER + 1)^0 * EOF -- чуть медленне?
+		-- local patt = (def2 + def1 + IDENTIFIER + 1)^0 * EOF -- чуть медленнее
 
 		Lang2lpeg['*'] = lpeg.Ct(patt)
 	end --^----- * ------^--
@@ -699,7 +725,6 @@ local Lexer2Lang = {
 	['vbscript']='VisualBasic',
 	['css']='CSS',
 	['pascal']='Pascal',
-	['php']='Php',
 	['python']='Python',
 	['lua']='Lua',
 	['nncrontab']='nnCron',
@@ -715,7 +740,6 @@ do -- Fill_Ext2Lang
 		[props['file.patterns.wscript']]='VisualBasic',
 		['*.css']='CSS',
 		[props['file.patterns.pascal']]='Pascal',
-		[props['file.patterns.php']]='Php',
 		[props['file.patterns.py']]='Python',
 		[props['file.patterns.lua']]='Lua',
 		[props['file.patterns.nncron']]='nnCron',
@@ -762,7 +786,7 @@ local function Functions_GetNames()
 	local start_code = Lang2CodeStart[lang]
 	local lpegPattern = Lang2lpeg[lang]
 	if not lpegPattern then
-		-- lang = Lexer2Lang[editor.LexerLanguage]
+		lang = Lexer2Lang[editor:GetLexerLanguage()]
 		start_code = Lang2CodeStart[lang]
 		lpegPattern = Lang2lpeg[lang]
 		if not tablePattern then
@@ -771,10 +795,7 @@ local function Functions_GetNames()
 		end
 	end
 	local textAll = editor:GetText()
-	local start_code_pos = 0
-	if start_code then
-		start_code_pos = editor:findtext(start_code, SCFIND_REGEXP)
-	end
+	local start_code_pos = start_code and editor:findtext(start_code, SCFIND_REGEXP) or 0
 
 	-- lpegPattern = nil
 	table_functions = lpegPattern:match(textAll, start_code_pos+1) -- 2nd arg is the symbol index to start with
@@ -865,12 +886,77 @@ list_func:on_key(function(key)
 		Functions_GotoLine()
 	end
 end)
+
+----------------------------------------------------------
+-- tab2:list_abbrev   Abbreviations
+----------------------------------------------------------
+local function Abbreviations_ListFILL()
+	local function ReadAbbrev(file)
+		local abbrev_file = io.open(file)
+		if abbrev_file then
+			for line in abbrev_file:lines() do
+				if line ~= '' then
+					local _abr, _exp = line:match('^([^#].-)=(.+)')
+					if _abr ~= nil then
+						list_abbrev:add_item({_abr, _exp}, _exp)
+					else
+						local import_file = line:match('^import%s+(.+)')
+						if import_file ~= nil then
+							ReadAbbrev(file:match('.+\\')..import_file)
+						end
+					end
+				end
+			end
+			abbrev_file:close()
+		end
+	end
+
+	list_abbrev:clear()
+	local abbrev_filename = props['AbbrevPath']
+	ReadAbbrev(abbrev_filename)
+end
+
+local function Abbreviations_InsertExpansion()
+	local sel_item = list_abbrev:get_selected_item()
+	if sel_item == -1 then return end
+	local expansion = list_abbrev:get_item_data(sel_item)
+	scite.InsertAbbreviation(expansion)
+	gui.pass_focus()
+	editor:CallTipCancel()
+end
+
+local function Abbreviations_ShowExpansion()
+	local sel_item = list_abbrev:get_selected_item()
+	if sel_item == -1 then return end
+	local expansion = list_abbrev:get_item_data(sel_item)
+	expansion = expansion:gsub('\\\\','\4'):gsub('\\r','\r'):gsub('(\\n','\n'):gsub('\\t','\t'):gsub('\4','\\')
+	editor:CallTipCancel()
+	editor:CallTipShow(editor.CurrentPos, expansion)
+end
+
+list_abbrev:on_double_click(function()
+	Abbreviations_InsertExpansion()
+end)
+
+list_abbrev:on_select(function()
+	Abbreviations_ShowExpansion()
+end)
+
+list_abbrev:on_key(function(key)
+	if key == 13 then -- Enter
+		Abbreviations_InsertExpansion()
+	end
+end)
+
 ----------------------------------------------------------
 -- Events
 ----------------------------------------------------------
+local line_count
+
 local function OnSwitch()
 	_DEBUG.timerstart('OnSwitch')
-	if tab0:bounds() then -- visible FileManager
+	line_count = editor.LineCount
+	if tab0:bounds() then -- visible FileMan
 		local path = props['FileDir']
 		if path == '' then return end
 		path = path:gsub('\\$','')..'\\'
@@ -878,9 +964,11 @@ local function OnSwitch()
 			current_path = path
 			FileMan_ListFILL()
 		end
-	elseif tab1:bounds() then -- visible Function
+	elseif tab1:bounds() then -- visible Funk
 		Functions_GetNames()
 		Functions_ListFILL()
+	elseif tab2:bounds() then -- visible Abbrev
+		Abbreviations_ListFILL()
 	end
 	_DEBUG.timerstop('OnSwitch')
 end
@@ -890,6 +978,7 @@ tabs:on_select(function(ind)
 	OnSwitch()
 end)
 
+-- —крытие / показ панели
 function SideBar_ShowHide()
 	if tonumber(props['sidebar.show'])==1 then
 		if win then
@@ -910,7 +999,7 @@ function SideBar_ShowHide()
 end
 
 local function OnDocumentCountLinesChanged(def_line_count)
-	if tab1:bounds() then -- visible Function
+	if tab1:bounds() then -- visible Funk
 		local cur_line = editor:LineFromPosition(editor.CurrentPos)
 		for i = 1, #table_functions do
 			local table_line = table_functions[i][2]
@@ -940,13 +1029,12 @@ function OnOpen(file)
 	return result
 end
 
--- Add user event handler OnKey
-local line_count = 0
-local old_OnKey = OnKey
-function OnKey(key, shift, ctrl, alt, char)
+-- Add user event handler OnUpdateUI
+local old_OnUpdateUI = OnUpdateUI
+function OnUpdateUI()
 	local result
-	if old_OnKey then result = old_OnKey(key, shift, ctrl, alt, char) end
-	if (editor.Focus) then
+	if old_OnUpdateUI then result = old_OnUpdateUI() end
+	if (editor.Focus and line_count) then
 		local line_count_new = editor.LineCount
 		local def_line_count = line_count_new - line_count
 		if def_line_count ~= 0 then
@@ -987,12 +1075,8 @@ end
 ----------------------------------------------------------
 -- Go to function definition
 ----------------------------------------------------------
-local function GetCurrentWord()
-	local current_pos = editor.CurrentPos
-	return editor:textrange( editor:WordStartPosition(current_pos, true),
-							editor:WordEndPosition(current_pos, true))
-end
 
+-- ѕо имени функции находим строку с ее объ€влением (инфа беретс€ из table_functions)
 local function Func2Line(funcname)
 	if not next(table_functions) then
 		Functions_GetNames()
@@ -1004,6 +1088,7 @@ local function Func2Line(funcname)
 	end
 end
 
+-- ѕереход на строку с объ€влением функции
 local function JumpToFuncDefinition()
 	local funcname = GetCurrentWord()
 	local line = Func2Line(funcname)

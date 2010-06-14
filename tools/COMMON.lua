@@ -1,11 +1,19 @@
 -- COMMON.lua
--- Version: 1.4.2
+-- Version: 1.4.8
 ---------------------------------------------------
 -- Общие функции, использующиеся во многих скриптах
 ---------------------------------------------------
 
 -- Пути поиска подключаемых lua-библиотек
 package.cpath = props["SciteDefaultHome"].."\\tools\\LuaLib\\?.dll;"..package.cpath
+
+--------------------------------------------------------
+-- Замена порой неработающего props['CurrentWord']
+function GetCurrentWord()
+	local current_pos = editor.CurrentPos
+	return editor:textrange(editor:WordStartPosition(current_pos, true),
+							editor:WordEndPosition(current_pos, true))
+end
 
 --------------------------------------------------------
 -- Замена ф-ций string.lower() и string.upper()
@@ -57,20 +65,29 @@ if props["chars.accented"] ~= "" then
 end -- IFDEF chars.accented
 
 --------------------------------------------------------
+-- string.to_pattern возращает строку, пригодную для использования
+-- в виде паттерна в string.find и т.п.
+-- Например: "xx-yy" -> "xx%-yy"
+local lua_patt_chars = "[%(%)%.%+%-%*%?%[%]%^%$%%]" -- управляющие паттернами символов Луа:
+function string.pattern( s )
+	return (s:gsub(lua_patt_chars,'%%%0'))-- фактически экранирование служебных символов символом %
+end
+
+--------------------------------------------------------
 -- Проверяет параметр на nil и если это так то возвращает default иначе возвращает сам параметр
 function ifnil(val, default)
-  if val == nil then
-    return default
-  else
-    return val
-  end
+	if val == nil then
+		return default
+	else
+		return val
+	end
 end
 
 --------------------------------------------------------
 -- Определение соответствует ли стиль символа стилю комментария
 function IsComment(pos)
 	local style = editor.StyleAt[pos]
-	local lexer = editor.LexerLanguage
+	local lexer = editor:GetLexerLanguage()
 	local comment = {
 		abap = {1, 2},
 		ada = {10},
@@ -135,8 +152,10 @@ end
 
 -- Выделение текста маркером определенного стиля
 function EditorMarkText(start, length, style_number)
+	local current_mark_number = scite.SendEditor(SCI_GETINDICATORCURRENT)
 	scite.SendEditor(SCI_SETINDICATORCURRENT, style_number)
 	scite.SendEditor(SCI_INDICATORFILLRANGE, start, length)
+	scite.SendEditor(SCI_SETINDICATORCURRENT, current_mark_number)
 end
 
 -- Очистка текста от маркерного выделения заданного стиля
@@ -144,6 +163,7 @@ end
 --   если не указана позиция и длина - очищается весь текст
 function EditorClearMarks(style_number, start, length)
 	local _first_style, _end_style, style
+	local current_mark_number = scite.SendEditor(SCI_GETINDICATORCURRENT)
 	if style_number == nil then
 		_first_style, _end_style = 0, 31
 	else
@@ -156,6 +176,7 @@ function EditorClearMarks(style_number, start, length)
 		scite.SendEditor(SCI_SETINDICATORCURRENT, style)
 		scite.SendEditor(SCI_INDICATORCLEARRANGE, start, length)
 	end
+	scite.SendEditor(SCI_SETINDICATORCURRENT, current_mark_number)
 end
 
 ----------------------------------------------------------------------------
@@ -183,11 +204,7 @@ local function style(mark_string)
 	strike   = INDIC_STRIKE,   hidden   = INDIC_HIDDEN,
 	roundbox = INDIC_ROUNDBOX, box      = INDIC_BOX
 	}
-	for st,st_num in pairs(mark_style_table) do
-		if string.match(mark_string, st) ~= nil then
-			return st_num
-		end
-	end
+	return mark_style_table[mark_string]
 end
 
 local function EditorInitMarkStyles()
@@ -195,7 +212,7 @@ local function EditorInitMarkStyles()
 		local mark = props["find.mark."..style_number]
 		if mark ~= "" then
 			local mark_color = mark:match("#%x%x%x%x%x%x") or (props["find.mark"]):match("#%x%x%x%x%x%x") or "#0F0F0F"
-			local mark_style = style(mark) or INDIC_ROUNDBOX
+			local mark_style = style(mark:match("%l+")) or INDIC_ROUNDBOX
 			local alpha_fill = tonumber((mark:match("%@%d+") or ""):sub(2)) or 30
 			InitMarkStyle(style_number, mark_style, mark_color, alpha_fill)
 		end
@@ -218,11 +235,8 @@ end
 ----------------------------------------------------------------------------
 -- Инвертирование состояния заданного параметра (используется для снятия/установки "галок" в меню)
 function CheckChange(prop_name)
-	if tonumber(props[prop_name]) == 1 then
-		props[prop_name] = 0
-	else
-		props[prop_name] = 1
-	end
+	local cur_prop = ifnil(tonumber(props[prop_name]), 0)
+	props[prop_name] = 1 - cur_prop
 end
 
 -- ==============================================================

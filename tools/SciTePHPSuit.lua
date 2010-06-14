@@ -3,15 +3,15 @@ Optimize SciTe For PHP
 Powered by qining(http://www.joyqi.com)
 version: 0.2
 Features:
- * Support for autocomplete (both variable and function)
- * Support for PHP Doc
- * Something more...
+* Support for autocomplete (both variable and function)
+* Support for PHP Doc
+* Something more...
 
 Usage:
- * Copy the script file to your SciTe Path
- * Set "autocompleteword.automatic=0"
- * Add "ext.lua.startup.script=$(SciteDefaultHome)/SciTePHPSuit.lua" to your config properties
- * Restart your editor
+* Copy the script file to your SciTe Path
+* Set "autocompleteword.automatic=0"
+* Add "ext.lua.startup.script=$(SciteDefaultHome)/SciTePHPSuit.lua" to your config properties
+* Restart your editor
 ]]
 
 -- require("gui");
@@ -27,7 +27,7 @@ local function isInDefinition(name, part)
             return true
         end
     end
-    
+
     return false
 end
 
@@ -73,9 +73,9 @@ local function checkAutoComplete(char)
         if(editor.CharAt[curPos] < 0) then
             break
         end
-        
+
         curChar = string.char(editor.CharAt[curPos])
-        
+
         if nil ~= string.match(curChar, "[_a-zA-Z0-9]") then
             find = curChar .. find
             curPos = curPos - 1
@@ -103,10 +103,10 @@ end
 
 local function formatEditorDoc(str, tab, line)
     scite.SendEditor(SCI_INSERTTEXT, editor.CurrentPos, str)
-    
+
     local selStart = editor:PositionFromLine(line) + string.len(tab) + 3
     local selEnd = selStart + string.len("description...")
-    
+
     scite.SendEditor(SCI_SETSELECTIONSTART, selStart)
     scite.SendEditor(SCI_SETSELECTIONEND, selEnd)
 end
@@ -120,7 +120,7 @@ local function findDefinedFunctionParams(params)
             table.insert(struct, "unknown $" .. var)
         end
     end
-    
+
     return struct;
 end
 
@@ -129,23 +129,23 @@ local function checkDoc(char)
         return
     end
 
-	if " " == char and editor.CurrentPos >= 3 and '/**' == editor:textrange(editor.CurrentPos - 4, editor.CurrentPos - 1) then
-		local str = "description... */"
-		scite.SendEditor(SCI_INSERTTEXT, editor.CurrentPos, str)
-		scite.SendEditor(SCI_SETSELECTIONSTART, editor.CurrentPos)
-		scite.SendEditor(SCI_SETSELECTIONEND, editor.CurrentPos + string.len("description..."))
-		return
-	end
+    if " " == char and editor.CurrentPos >= 3 and '/**' == editor:textrange(editor.CurrentPos - 4, editor.CurrentPos - 1) then
+        local str = "description... */"
+        scite.SendEditor(SCI_INSERTTEXT, editor.CurrentPos, str)
+        scite.SendEditor(SCI_SETSELECTIONSTART, editor.CurrentPos)
+        scite.SendEditor(SCI_SETSELECTIONEND, editor.CurrentPos + string.len("description..."))
+        return
+    end
 
     local line = editor:LineFromPosition(editor.CurrentPos)
     local lineStart = editor:PositionFromLine(line - 1)
     local prevLine = editor:GetLine(line - 1)
     local lineEnd = lineStart
-    
+
     if nil ~= prevLine then
         lineEnd = lineEnd + string.len(prevLine)
     end
-    
+
     local nextLine = nil
     local eol = "\n"
     local eolLength = 1
@@ -154,11 +154,11 @@ local function checkDoc(char)
         eol = "\r\n"
         eolLength = 2
     end
-    
+
     if 1 == editor.EOLMode then
         eol = "\r"
     end
-    
+
     if(lineEnd < lineStart + eolLength + 3) then
         return
     end
@@ -194,23 +194,23 @@ local function checkDoc(char)
                     else
                         iaccess = access1
                     end
-                    
+
                     local struct = findDefinedFunctionParams(nextLine)
-                    
+
                     str = trim .. " * description..." .. eol
                     str = str .. tab .. " * " .. eol
-                    
+
                     if string.len(iaccess) > 0 then
                         str = str .. tab .. " * @access " .. iaccess .. eol
                     end
-                    
+
                     for key, class in pairs(struct) do
                         str = str .. tab .. " * @param " .. class .. eol
                     end
-                    
+
                     str = str .. tab .. " * @return unknown" .. eol
                     str = str .. tab .. " */"
-                    
+
                     formatEditorDoc(str, tab, line)
                     return
                 end
@@ -226,7 +226,7 @@ local function checkDoc(char)
                     str = str .. tab .. " * @category typecho" .. eol
                     str = str .. tab .. " * @package " .. className .. eol
                     str = str .. tab .. " */"
-                    
+
                     formatEditorDoc(str, tab, line)
                     return
                 end
@@ -242,19 +242,19 @@ local function checkDoc(char)
                     else
                         iaccess = access1
                     end
-                    
+
                     str = trim .. " * description..." .. eol
                     str = str .. tab .. " * " .. eol
                     str = str .. tab .. " * @access " .. iaccess .. eol
                     str = str .. tab .. " * @var unknown" .. eol
                     str = str .. tab .. " */"
-                    
+
                     formatEditorDoc(str, tab, line)
                     return
                 end
             end
         end
-        
+
 
         if nextLine ~= nil then
             local realLine = string.gsub(nextLine, "%s*", "");
@@ -262,25 +262,25 @@ local function checkDoc(char)
             local realLine = '';
         end
 
-		if realLine ~= nil then
-			str = trim .. " * description..." .. eol
-			str = str .. tab .. " * " .. eol
-			str = str .. tab .. " */"
-			formatEditorDoc(str, tab, line)
+        if realLine ~= nil then
+            str = trim .. " * description..." .. eol
+            str = str .. tab .. " * " .. eol
+            str = str .. tab .. " */"
+            formatEditorDoc(str, tab, line)
             return
-		else
-			str = trim .. " * description..." .. eol
-			str = str .. tab .. " * " .. eol
-			str = str .. tab .. " * @author qining" .. eol
-			str = str .. tab .. " * @category typecho" .. eol
-			str = str .. tab .. " * @package default" .. eol
-			str = str .. tab .. " * @copyright Copyright (c) 2008 Typecho team (http://www.typecho.org)" .. eol
-			str = str .. tab .. " * @license GNU General Public License 2.0" .. eol
-			str = str .. tab .. " * @version $Id$" .. eol
-			str = str .. tab .. " */"
-			formatEditorDoc(str, tab, line)
+        else
+            str = trim .. " * description..." .. eol
+            str = str .. tab .. " * " .. eol
+            str = str .. tab .. " * @author qining" .. eol
+            str = str .. tab .. " * @category typecho" .. eol
+            str = str .. tab .. " * @package default" .. eol
+            str = str .. tab .. " * @copyright Copyright (c) 2008 Typecho team (http://www.typecho.org)" .. eol
+            str = str .. tab .. " * @license GNU General Public License 2.0" .. eol
+            str = str .. tab .. " * @version $Id$" .. eol
+            str = str .. tab .. " */"
+            formatEditorDoc(str, tab, line)
             return
-		end
+        end
     end
 
     if ("\n" == char or "\r" == char) and lineEnd >= 2 and '*' == editor:textrange(lineStart + tabLen, lineStart + tabLen + 1) and '/' ~= editor:textrange(lineStart + tabLen + 1, lineStart + tabLen + 2) then
@@ -316,3 +316,21 @@ function OnChar(char)
     checkAutoComplete(char)
     checkDoc(char)
 end
+
+local toClose = { ['('] = ')', ['{'] = '}', ['['] = ']', ['"'] = '"', ["'"] = "'", ['<'] = '>' }
+function OnChar(char)
+    local pos = editor.CurrentPos
+    local preChar = editor.CharAt[pos-2]
+    local nextChar = editor.CharAt[pos]
+    if toClose[char] ~= nil and char ~= string.char(nextChar) then
+        editor:ReplaceSel(toClose[char])
+        editor:SetSel(pos, pos)
+    elseif string.len(preChar) == 1 and char == toClose[string.char(preChar)] then
+            editor:SetSel(pos, pos+1)
+            editor:ReplaceSel('')
+    else
+        checkAutoComplete(char)
+        checkDoc(char)
+    end
+end
+
