@@ -317,7 +317,7 @@ function OnChar(char)
     checkDoc(char)
 end
 
-local toClose = { ['('] = ')', ['{'] = '}', ['['] = ']', ['"'] = '"', ["'"] = "'", ['<'] = '>' }
+local toClose = { ['('] = ')', ['{'] = '}', ['['] = ']', ['"'] = '"', ["'"] = "'" }
 function OnChar(char)
     local pos = editor.CurrentPos
     local preChar = editor.CharAt[pos-2]
